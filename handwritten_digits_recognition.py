@@ -21,20 +21,17 @@ if train_new_model:
     # Add two dense hidden layers
     # Add one dense output layer for the 10 digits
     model = tf.keras.models.Sequential()
-    model.add(tf.keras.layers.Flatten())
+    model.add(tf.keras.layers.Flatten(input_shape=(28, 28)))
     model.add(tf.keras.layers.Dense(units=128, activation="relu"))
     model.add(tf.keras.layers.Dense(units=128, activation="relu"))
     model.add(tf.keras.layers.Dense(units=10, activation="softmax"))
-    # model.add(tf.keras.layers.Dense(units=128, activation=tf.nn.relu))
-    # model.add(tf.keras.layers.Dense(units=128, activation=tf.nn.relu))
-    # model.add(tf.keras.layers.Dense(units=10, activation=tf.nn.softmax))
 
 
     # Compiling and optimizing model
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Training the model
-    model.fit(X_train, y_train, epochs=3)
+    model.fit(X_train, y_train, epochs=5)
 
     # Evaluating the model
     val_loss, val_acc = model.evaluate(X_test, y_test)
@@ -42,11 +39,10 @@ if train_new_model:
     print(val_acc)
 
     # Saving the model
-   # Saving the model in HDF5 format
-    model.save('/Users/pogoriladaria/Dropbox/Mac/Desktop/handwritten-digits-recognition/handwritten_digits.h5')
+    model.save('/Users/pogoriladaria/Dropbox/Mac/Desktop/handwritten-digits-recognition/handwritten_digits.keras')
 else:
-    # Load the model
-    model = tf.keras.models.load_model('/Users/pogoriladaria/Dropbox/Mac/Desktop/handwritten-digits-recognition/handwritten_digits.h5')
+    # Load the model (завантажити вже натреновану модель)
+    model = tf.keras.models.load_model('/Users/pogoriladaria/Dropbox/Mac/Desktop/handwritten-digits-recognition/handwritten_digits.keras')
 
 # Load custom images and predict them
 image_number = 1
@@ -55,7 +51,7 @@ while os.path.isfile('digits/digit{}.png'.format(image_number)):
         img = cv2.imread('digits/digit{}.png'.format(image_number))[:,:,0]
         img = np.invert(np.array([img]))
         prediction = model.predict(img)
-        print("The number is probably a {}".format(np.argmax(prediction)))
+        print("The number is probably a {}".format(np.argmax(prediction))) # which neuron has the highest activation 
         plt.imshow(img[0], cmap=plt.cm.binary)
         plt.show()
         image_number += 1

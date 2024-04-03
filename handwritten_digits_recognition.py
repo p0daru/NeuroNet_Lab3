@@ -39,10 +39,10 @@ if train_new_model:
     print(val_acc)
 
     # Збереження моделі
-    model.save('/Users/pogoriladaria/Dropbox/Mac/Desktop/handwritten-digits-recognition/handwritten_digits.keras')
+    model.save('handwritten_digits.keras')
 else:
     # Завантажити існуючу модель
-    model = tf.keras.models.load_model('/Users/pogoriladaria/Dropbox/Mac/Desktop/handwritten-digits-recognition/handwritten_digits.keras')
+    model = tf.keras.models.load_model('handwritten_digits.keras')
 
 # Завантаження кастомних зображень та їх передбачення
 image_number = 1
@@ -58,3 +58,4 @@ while os.path.isfile('digits/digit{}.png'.format(image_number)):
     except:
         print("Error reading image! Proceeding with next image...")
         image_number += 1
+
